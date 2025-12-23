@@ -1,10 +1,15 @@
 from fastapi import FastAPI
 from scanner import scan_directory_fast
-from database import save_abilities, get_all_abilities
+from database import init_db, save_abilities, get_all_abilities
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
+# Run this once when server starts
+@app.on_event("startup")
+def startup_event():
+    init_db()
+    
 # Allow React to talk to Python
 app.add_middleware(
     CORSMiddleware,
